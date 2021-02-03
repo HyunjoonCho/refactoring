@@ -11,25 +11,23 @@ import java.util.Map;
 import java.util.Objects;
 
 public class StatementService {
+    private Invoice invoice;
     private Map<String, Play> plays;
 
     public String statement(Invoice invoice, Map<String, Play> plays) {
+        this.invoice = Objects.requireNonNull(invoice, "invoice");
         this.plays = Objects.requireNonNull(plays, "plays");
 
         int totalAmount = 0;
         final StringBuilder result = new StringBuilder();
         result.append("Invoice (Customer: ").append(invoice.getCustomer()).append(")\n");
 
-        List<Performance> performances = invoice.getPerformances();
-        for (Performance performance : performances) {
+        for (Performance performance : invoice.getPerformances()) {
             result.append(" -").append(playFor(performance).getName()).append(": ").append(krw(amountFor(performance)))
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
             totalAmount += amountFor(performance);
         }
-        int volumeCredits = 0;
-        for (Performance performance : performances) {
-            volumeCredits += volumeCreditsFor(performance);
-        }
+        int volumeCredits = totalVolumeCredits();
 
         result.append("Total Amount: ").append(krw(totalAmount)).append("\n");
         result.append("Credit: ").append(volumeCredits).append("pts\n");
@@ -76,6 +74,16 @@ public class StatementService {
         }
 
         return result;
+    }
+
+    private int totalVolumeCredits() {
+        int volumeCredits = 0;
+
+        for (Performance performance : invoice.getPerformances()) {
+            volumeCredits += volumeCreditsFor(performance);
+        }
+
+        return volumeCredits;
     }
 
     private String krw(int aNumber) {
