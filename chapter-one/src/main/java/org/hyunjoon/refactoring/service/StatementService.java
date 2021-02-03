@@ -20,18 +20,17 @@ public class StatementService {
         int volumeCredits = 0;
         final StringBuilder result = new StringBuilder();
         result.append("Invoice (Customer: ").append(invoice.getCustomer()).append(")\n");
-        NumberFormat moneyFormat = NumberFormat.getCurrencyInstance();
 
         List<Performance> performances = invoice.getPerformances();
         for (Performance performance : performances) {
             volumeCredits += volumeCreditsFor(performance);
 
-            result.append(" -").append(playFor(performance).getName()).append(": ").append(moneyFormat.format(amountFor(performance) * 10))
+            result.append(" -").append(playFor(performance).getName()).append(": ").append(krw(amountFor(performance)))
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
             totalAmount += amountFor(performance);
         }
 
-        result.append("Total Amount: ").append(moneyFormat.format(totalAmount * 10)).append("\n");
+        result.append("Total Amount: ").append(krw(totalAmount)).append("\n");
         result.append("Credit: ").append(volumeCredits).append("pts\n");
 
         return result.toString();
@@ -76,5 +75,9 @@ public class StatementService {
         }
 
         return result;
+    }
+
+    private String krw(int aNumber) {
+        return NumberFormat.getCurrencyInstance().format(aNumber * 10);
     }
 }

@@ -11,4 +11,4 @@
 - Change temporary variable into for-function e.g. get play from performance
 - Inline variable  
 - Change function declaration  
- 
+- Minimize temporary variables for further extraction  
