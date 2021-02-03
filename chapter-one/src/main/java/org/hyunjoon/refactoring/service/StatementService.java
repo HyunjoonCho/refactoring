@@ -17,7 +17,6 @@ public class StatementService {
         this.plays = Objects.requireNonNull(plays, "plays");
 
         int totalAmount = 0;
-        int volumeCredits = 0;
         final StringBuilder result = new StringBuilder();
         result.append("Invoice (Customer: ").append(invoice.getCustomer()).append(")\n");
 
@@ -27,6 +26,7 @@ public class StatementService {
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
             totalAmount += amountFor(performance);
         }
+        int volumeCredits = 0;
         for (Performance performance : performances) {
             volumeCredits += volumeCreditsFor(performance);
         }
