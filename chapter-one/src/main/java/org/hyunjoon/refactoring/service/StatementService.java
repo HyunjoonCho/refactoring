@@ -24,10 +24,7 @@ public class StatementService {
 
         List<Performance> performances = invoice.getPerformances();
         for (Performance performance : performances) {
-            volumeCredits += Math.max(performance.getAudience() - 30, 0);
-            if (playFor(performance).getType() == Type.COMEDY) {
-                volumeCredits += Math.floor(performance.getAudience() / 5);
-            }
+            volumeCredits += volumeCreditsFor(performance);
 
             result.append(" -").append(playFor(performance).getName()).append(": ").append(moneyFormat.format(amountFor(performance) * 10))
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
@@ -65,6 +62,17 @@ public class StatementService {
 
             default:
                 throw new RuntimeException("Unknown Type: " + playFor(aPerformance).getType());
+        }
+
+        return result;
+    }
+
+    private int volumeCreditsFor(Performance aPerformance) {
+        int result = 0;
+
+        result += Math.max(aPerformance.getAudience() - 30, 0);
+        if (playFor(aPerformance).getType() == Type.COMEDY) {
+            result += Math.floor(aPerformance.getAudience() / 5);
         }
 
         return result;
