@@ -23,11 +23,12 @@ public class StatementService {
 
         List<Performance> performances = invoice.getPerformances();
         for (Performance performance : performances) {
-            volumeCredits += volumeCreditsFor(performance);
-
             result.append(" -").append(playFor(performance).getName()).append(": ").append(krw(amountFor(performance)))
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
             totalAmount += amountFor(performance);
+        }
+        for (Performance performance : performances) {
+            volumeCredits += volumeCreditsFor(performance);
         }
 
         result.append("Total Amount: ").append(krw(totalAmount)).append("\n");
