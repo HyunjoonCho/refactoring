@@ -24,16 +24,14 @@ public class StatementService {
 
         List<Performance> performances = invoice.getPerformances();
         for (Performance performance : performances) {
-            int thisAmount = amountFor(performance);
-
             volumeCredits += Math.max(performance.getAudience() - 30, 0);
             if (playFor(performance).getType() == Type.COMEDY) {
                 volumeCredits += Math.floor(performance.getAudience() / 5);
             }
 
-            result.append(" -").append(playFor(performance).getName()).append(": ").append(moneyFormat.format(thisAmount * 10))
+            result.append(" -").append(playFor(performance).getName()).append(": ").append(moneyFormat.format(amountFor(performance) * 10))
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
-            totalAmount += thisAmount;
+            totalAmount += amountFor(performance);
         }
 
         result.append("Total Amount: ").append(moneyFormat.format(totalAmount * 10)).append("\n");
