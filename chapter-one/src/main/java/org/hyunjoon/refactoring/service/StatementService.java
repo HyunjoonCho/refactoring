@@ -6,7 +6,6 @@ import org.hyunjoon.refactoring.model.Play;
 import org.hyunjoon.refactoring.model.Type;
 
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,10 +26,9 @@ public class StatementService {
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
             totalAmount += amountFor(performance);
         }
-        int volumeCredits = totalVolumeCredits();
 
         result.append("Total Amount: ").append(krw(totalAmount)).append("\n");
-        result.append("Credit: ").append(volumeCredits).append("pts\n");
+        result.append("Credit: ").append(totalVolumeCredits()).append("pts\n");
 
         return result.toString();
     }
