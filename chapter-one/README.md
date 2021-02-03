@@ -8,4 +8,7 @@
 - Always run test after any small change, thus automate it  
 - Rename variables  
   - write Human-readable code  
-- Change temporary variable into for-function e.g. get play from performance 
+- Change temporary variable into for-function e.g. get play from performance
+- Inline variable  
+- Change function declaration  
+ 

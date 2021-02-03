@@ -24,7 +24,7 @@ public class StatementService {
 
         List<Performance> performances = invoice.getPerformances();
         for (Performance performance : performances) {
-            int thisAmount = amountFor(performance, playFor(performance));
+            int thisAmount = amountFor(performance);
 
             volumeCredits += Math.max(performance.getAudience() - 30, 0);
             if (playFor(performance).getType() == Type.COMEDY) {
@@ -46,10 +46,10 @@ public class StatementService {
         return plays.get(performance.getPlayID());
     }
 
-    private int amountFor(Performance aPerformance, Play play) {
+    private int amountFor(Performance aPerformance) {
         int result = 0;
 
-        switch (play.getType()) {
+        switch (playFor(aPerformance).getType()) {
             case TRAGEDY:
                 result = 40000;
                 if (aPerformance.getAudience() > 30) {
@@ -66,7 +66,7 @@ public class StatementService {
                 break;
 
             default:
-                throw new RuntimeException("Unknown Type: " + play.getType());
+                throw new RuntimeException("Unknown Type: " + playFor(aPerformance).getType());
         }
 
         return result;
