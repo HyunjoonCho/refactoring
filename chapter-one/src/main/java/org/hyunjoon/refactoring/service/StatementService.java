@@ -11,9 +11,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class StatementService {
-    public static String statement(Invoice invoice, Map<String, Play> plays) {
-        Objects.requireNonNull(invoice, "invoice");
-        Objects.requireNonNull(plays, "plays");
+    private Map<String, Play> plays;
+
+    public String statement(Invoice invoice, Map<String, Play> plays) {
+        this.plays = Objects.requireNonNull(plays, "plays");
 
         int totalAmount = 0;
         int volumeCredits = 0;
@@ -23,7 +24,7 @@ public class StatementService {
 
         List<Performance> performances = invoice.getPerformances();
         for (Performance performance : performances) {
-            final Play play = plays.get(performance.getPlayID());
+            final Play play = playFor(performance);
             int thisAmount = amountFor(performance, play);
 
             volumeCredits += Math.max(performance.getAudience() - 30, 0);
@@ -42,29 +43,33 @@ public class StatementService {
         return result.toString();
     }
 
-    private static int amountFor(Performance performance, Play play) {
-        int thisAmount = 0;
+    private Play playFor(Performance performance) {
+        return plays.get(performance.getPlayID());
+    }
+
+    private int amountFor(Performance aPerformance, Play play) {
+        int result = 0;
 
         switch (play.getType()) {
             case TRAGEDY:
-                thisAmount = 40000;
-                if (performance.getAudience() > 30) {
-                    thisAmount += 1000 * (performance.getAudience() - 30);
+                result = 40000;
+                if (aPerformance.getAudience() > 30) {
+                    result += 1000 * (aPerformance.getAudience() - 30);
                 }
                 break;
 
             case COMEDY:
-                thisAmount = 30000;
-                if (performance.getAudience() > 20) {
-                    thisAmount += 10000 + 500 * (performance.getAudience() - 20);
+                result = 30000;
+                if (aPerformance.getAudience() > 20) {
+                    result += 10000 + 500 * (aPerformance.getAudience() - 20);
                 }
-                thisAmount += 300 * performance.getAudience();
+                result += 300 * aPerformance.getAudience();
                 break;
 
             default:
                 throw new RuntimeException("Unknown Type: " + play.getType());
         }
 
-        return thisAmount;
+        return result;
     }
 }

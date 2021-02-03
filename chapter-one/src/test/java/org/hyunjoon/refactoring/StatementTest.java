@@ -23,7 +23,8 @@ public class StatementTest {
 
     @Test
     public void testStatementService() {
-        Assert.assertEquals(expectedInvoice, StatementService.statement(createInvoice(), createPlays()));
+        StatementService statementService = new StatementService();
+        Assert.assertEquals(expectedInvoice, statementService.statement(createInvoice(), createPlays()));
     }
 
     private Invoice createInvoice() {
