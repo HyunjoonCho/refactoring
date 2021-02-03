@@ -17,17 +17,15 @@ public class StatementService {
         this.invoice = Objects.requireNonNull(invoice, "invoice");
         this.plays = Objects.requireNonNull(plays, "plays");
 
-        int totalAmount = 0;
         final StringBuilder result = new StringBuilder();
         result.append("Invoice (Customer: ").append(invoice.getCustomer()).append(")\n");
 
         for (Performance performance : invoice.getPerformances()) {
             result.append(" -").append(playFor(performance).getName()).append(": ").append(krw(amountFor(performance)))
                     .append(" (").append(performance.getAudience()).append("ppl)\n");
-            totalAmount += amountFor(performance);
         }
 
-        result.append("Total Amount: ").append(krw(totalAmount)).append("\n");
+        result.append("Total Amount: ").append(krw(totalAmount())).append("\n");
         result.append("Credit: ").append(totalVolumeCredits()).append("pts\n");
 
         return result.toString();
@@ -75,13 +73,23 @@ public class StatementService {
     }
 
     private int totalVolumeCredits() {
-        int volumeCredits = 0;
+        int result = 0;
 
         for (Performance performance : invoice.getPerformances()) {
-            volumeCredits += volumeCreditsFor(performance);
+            result += volumeCreditsFor(performance);
         }
 
-        return volumeCredits;
+        return result;
+    }
+
+    private int totalAmount() {
+        int result = 0;
+
+        for (Performance performance : invoice.getPerformances()) {
+            result += amountFor(performance);
+        }
+
+        return result;
     }
 
     private String krw(int aNumber) {
